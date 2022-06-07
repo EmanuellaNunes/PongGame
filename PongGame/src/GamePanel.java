@@ -5,6 +5,7 @@ import javax.swing.*; //Classes para criação de gráficos leves
 
 public class GamePanel extends JPanel implements Runnable{
     
+    //Configurações de tamanhos
     static final int TELA_LARGURA = 1000;
     static final int TELA_ALTURA = (int)(TELA_LARGURA * (0.5555)); //Ajusta auto.
     static final Dimension TELA_TAMANHO = new Dimension(TELA_LARGURA, 
@@ -12,12 +13,15 @@ public class GamePanel extends JPanel implements Runnable{
     static final int BOLA_TAMANHO = 20;
     static final int RAQUETE_LARGURA = 25;
     static final int RAQUETE_ALTURA = 100;
+    
+    //Declaração de objetos
     Thread gameThread;
     Image image;
     Graphics graphics;
     Random random;
     Raquete raquete1;
     Raquete raquete2;
+    Bola bola;
     Placar placar;
     
     GamePanel() {
@@ -33,7 +37,8 @@ public class GamePanel extends JPanel implements Runnable{
     }
     
     public void newBola() {
-        
+        //random = new Random();
+        bola = new Bola((TELA_LARGURA/2)-(BOLA_TAMANHO/2), (TELA_ALTURA/2)-(BOLA_TAMANHO/2), BOLA_TAMANHO, BOLA_TAMANHO);
     }
     public void newRaquete() {
         raquete1 = new Raquete(0,(TELA_ALTURA/2)-(RAQUETE_ALTURA/2), RAQUETE_LARGURA, RAQUETE_ALTURA,1);
@@ -48,13 +53,40 @@ public class GamePanel extends JPanel implements Runnable{
     public void draw(Graphics g) {
         raquete1.draw(g);
         raquete2.draw(g);
+        bola.draw(g);
         
     }
+    
     public void mover() {
-        
+        raquete1.mover();   //Permite uma fluidez maior das raquetes
+        raquete2.mover();   //Permite uma fluidez maior das raquetes
+        bola.mover();
     }
+    
+    //Impede que os elementods ultrapassem o limite da janela
     public void checarColisao() {
+        //Bola
+        if (bola.y <= 0) {
+            bola.setSentidoY(-bola.velocidadeY);
+        }
+        if (bola.y >= TELA_ALTURA - BOLA_TAMANHO) {
+            bola.setSentidoY(-bola.velocidadeY);
+        }
         
+        //Raquete 1
+        if (raquete1.y <= 0) {
+            raquete1.y = 0;
+        }
+        if (raquete1.y >= (TELA_ALTURA - RAQUETE_ALTURA)) {
+            raquete1.y = TELA_ALTURA - RAQUETE_ALTURA;
+        }
+        //Raquete 2
+        if (raquete2.y <= 0) {
+            raquete2.y = 0;
+        }
+        if (raquete2.y >= (TELA_ALTURA - RAQUETE_ALTURA)) {
+            raquete2.y = TELA_ALTURA - RAQUETE_ALTURA;
+        }
     }
     public void run() {     //Para rodar o game a 60 fps; Trecho de código do Minecraft
         long lastTime = System.nanoTime();
@@ -80,7 +112,7 @@ public class GamePanel extends JPanel implements Runnable{
             raquete2.keyPressed(e);
         }
         public void keyReleased(KeyEvent e){
-            raquete1.keyPressed(e);
+            raquete1.keyReleased(e);
             raquete2.keyReleased(e);
         }
     }
