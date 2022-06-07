@@ -5,7 +5,7 @@ import javax.swing.*; //Classes para criação de gráficos leves
 
 public class GamePanel extends JPanel implements Runnable{
     
-    //Configurações de tamanhos
+    //Configurações de tamanhos----------
     static final int TELA_LARGURA = 1000;
     static final int TELA_ALTURA = (int)(TELA_LARGURA * (0.5555)); //Ajusta auto.
     static final Dimension TELA_TAMANHO = new Dimension(TELA_LARGURA, 
@@ -13,8 +13,9 @@ public class GamePanel extends JPanel implements Runnable{
     static final int BOLA_TAMANHO = 20;
     static final int RAQUETE_LARGURA = 25;
     static final int RAQUETE_ALTURA = 100;
+    //------------------------------------
     
-    //Declaração de objetos
+    //Declaração de objetos---------------
     Thread gameThread;
     Image image;
     Graphics graphics;
@@ -23,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable{
     Raquete raquete2;
     Bola bola;
     Placar placar;
+    //------------------------------------
     
     GamePanel() {
         newRaquete();
@@ -50,12 +52,15 @@ public class GamePanel extends JPanel implements Runnable{
         draw(graphics);
         g.drawImage(image,0,0,this);
     }
+    
+    //Desenha os objetos na tela-----------
     public void draw(Graphics g) {
         raquete1.draw(g);
         raquete2.draw(g);
         bola.draw(g);
-        
+        placar.draw(g); //Divisa da mesa   
     }
+    //------------------------------------
     
     public void mover() {
         raquete1.mover();   //Permite uma fluidez maior das raquetes
@@ -115,7 +120,22 @@ public class GamePanel extends JPanel implements Runnable{
             }
             bola.setSentidoX(-bola.velocidadeX);
             bola.setSentidoY(bola.velocidadeY);
-        }          
+        }
+        
+        //Marca o score e recria os obj
+        //Player 2
+        if (bola.x <= 0) {
+            placar.player2++;
+            newRaquete();
+            newBola();     
+        }
+        //Player 1
+        if (bola.x >= TELA_LARGURA-BOLA_TAMANHO) {
+            placar.player1++;
+            newRaquete();
+            newBola();     
+        }
+        
         
     }
     public void run() {     //Para rodar o game a 60 fps; Trecho de código do Minecraft
