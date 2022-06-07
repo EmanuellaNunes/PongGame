@@ -7,27 +7,79 @@ public class Raquete extends Rectangle {
     
     int id; 
     int velocidadeY;
+    int velocidade = 10;
     
-    Raquete() {
+    Raquete(int x, int y, int RAQUETE_LARGURA, int RAQUETE_ALTURA, int id) {
+        super(x, y, RAQUETE_LARGURA, RAQUETE_ALTURA);
+        this.id = id;
         
     }
     
+    //Movimentar as raquetes
     public void keyPressed(KeyEvent e) {
-        
+        switch(id) {
+            case 1:
+                if (e.getKeyCode() == KeyEvent.VK_W) {
+                    setSentidoY(-velocidade);
+                    mover();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_S) {
+                    setSentidoY(velocidade);
+                    mover();
+                }
+                break;
+            case 2:
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    setSentidoY(-velocidade);
+                    mover();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    setSentidoY(velocidade);
+                    mover();
+                }
+                break;
+        }
     }
     public void keyReleased(KeyEvent e) {
-        
+        switch(id) {
+            case 1:
+                if (e.getKeyCode() == KeyEvent.VK_W) {
+                    setSentidoY(0);
+                    mover();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_S) {
+                    setSentidoY(0);
+                    mover();
+                }
+                break;
+            case 2:
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    setSentidoY(0);
+                    mover();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    setSentidoY(0);
+                    mover();
+                }
+                break;
+        }        
     }
     
     public void setSentidoY(int sentidoY) {
-        
+        velocidadeY = sentidoY;
     }
     
     public void mover() {
-        
+        y = y + velocidadeY;
     }
     
     public void draw(Graphics g) {
-        
+        if (id == 1) {
+            g.setColor(Color.blue);
+        }
+        else {
+            g.setColor(Color.red);
+        }
+        g.fillRect(x, y, width, height);
     }
 }

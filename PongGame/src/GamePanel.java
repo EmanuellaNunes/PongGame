@@ -36,7 +36,8 @@ public class GamePanel extends JPanel implements Runnable{
         
     }
     public void newRaquete() {
-        
+        raquete1 = new Raquete(0,(TELA_ALTURA/2)-(RAQUETE_ALTURA/2), RAQUETE_LARGURA, RAQUETE_ALTURA,1);
+        raquete2 = new Raquete(TELA_LARGURA-RAQUETE_LARGURA,(TELA_ALTURA/2)-(RAQUETE_ALTURA/2), RAQUETE_LARGURA, RAQUETE_ALTURA,2);        
     }
     public void paint(Graphics g) {
         image = createImage(getWidth(),getHeight());
@@ -45,6 +46,8 @@ public class GamePanel extends JPanel implements Runnable{
         g.drawImage(image,0,0,this);
     }
     public void draw(Graphics g) {
+        raquete1.draw(g);
+        raquete2.draw(g);
         
     }
     public void mover() {
@@ -53,15 +56,32 @@ public class GamePanel extends JPanel implements Runnable{
     public void checarColisao() {
         
     }
-    public void run() {
-        
+    public void run() {     //Para rodar o game a 60 fps; Trecho de código do Minecraft
+        long lastTime = System.nanoTime();
+        double amountOfTicks = 60.0;
+        double ns = 1000000000 / amountOfTicks;
+        double delta = 0;
+        while(true) {
+            long now = System.nanoTime();
+            delta = delta + (now - lastTime)/ns;
+            lastTime = now;
+            if (delta >= 1) {
+                mover();
+                checarColisao();
+                repaint();
+                delta--;
+                //System.out.println("Test");
+            }
+        }
     }
     public class AL extends KeyAdapter{     //Recebe os comandos da raquete
         public void keyPressed(KeyEvent e){
-            
+            raquete1.keyPressed(e);
+            raquete2.keyPressed(e);
         }
         public void keyReleased(KeyEvent e){
-            
+            raquete1.keyPressed(e);
+            raquete2.keyReleased(e);
         }
     }
 }
