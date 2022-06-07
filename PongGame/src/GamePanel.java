@@ -63,8 +63,9 @@ public class GamePanel extends JPanel implements Runnable{
         bola.mover();
     }
     
-    //Impede que os elementods ultrapassem o limite da janela
+    
     public void checarColisao() {
+    //Impede que os elementos ultrapassem limites de outros objetos ou janela
         //Bola
         if (bola.y <= 0) {
             bola.setSentidoY(-bola.velocidadeY);
@@ -87,6 +88,35 @@ public class GamePanel extends JPanel implements Runnable{
         if (raquete2.y >= (TELA_ALTURA - RAQUETE_ALTURA)) {
             raquete2.y = TELA_ALTURA - RAQUETE_ALTURA;
         }
+        
+        //Bola rebate na raquete 1
+        if (bola.intersects(raquete1)) {
+            bola.velocidadeX = bola.velocidadeX * (-1);
+            bola.velocidadeX++;
+            if (bola.velocidadeY > 0) {
+                bola.velocidadeY++;
+            }
+            else {
+                bola.velocidadeY--;
+            }
+            bola.setSentidoX(bola.velocidadeX);
+            bola.setSentidoY(bola.velocidadeY);
+        }
+
+        //Bola rebate na raquete 2
+        if (bola.intersects(raquete2)) {
+            bola.velocidadeX = bola.velocidadeX * (-1);
+            bola.velocidadeX++;
+            if (bola.velocidadeY > 0) {
+                bola.velocidadeY++;
+            }
+            else {
+                bola.velocidadeY--;
+            }
+            bola.setSentidoX(-bola.velocidadeX);
+            bola.setSentidoY(bola.velocidadeY);
+        }          
+        
     }
     public void run() {     //Para rodar o game a 60 fps; Trecho de código do Minecraft
         long lastTime = System.nanoTime();
