@@ -3,15 +3,18 @@ import java.awt.event.*; //Classes para manuseio de eventos AWT
 import java.util.*;
 import javax.swing.*; //Classes para criação de gráficos leves
 
-public class Raquete extends Rectangle {
+public class Raquete extends Rectangle {//implements Runnable {
     
     int id; 
     int velocidadeY;
     int velocidade = 10;
+    Thread raqueteThread;
     
     Raquete(int x, int y, int RAQUETE_LARGURA, int RAQUETE_ALTURA, int id) {
         super(x, y, RAQUETE_LARGURA, RAQUETE_ALTURA);
         this.id = id;
+        //raqueteThread = new Thread(this);
+        //raqueteThread.start();
         
     }
     
@@ -82,4 +85,20 @@ public class Raquete extends Rectangle {
         }
         g.fillRect(x, y, width, height);
     }
+    
+    /*public void run() {
+        long lastTime = System.nanoTime();
+        double amountOfTicks = 120.0;   //Regula o FPS do objeto
+        double ns = 1000000000 / amountOfTicks; //Regula o FPS do objeto
+        double delta = 0;
+        while(true) {
+            long now = System.nanoTime();
+            delta = delta + (now - lastTime)/ns;
+            lastTime = now;
+            if (delta >= 1) {
+                mover();
+                delta--;
+            }
+        }    
+    }*/
 }

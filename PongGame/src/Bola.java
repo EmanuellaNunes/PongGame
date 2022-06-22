@@ -3,16 +3,19 @@ import java.awt.event.*; //Classes para manuseio de eventos AWT
 import java.util.*;
 import javax.swing.*; //Classes para criação de gráficos leves
 
-public class Bola extends Rectangle {
+public class Bola extends Rectangle implements Runnable {
     
     Random random;
     int velocidadeX;
     int velocidadeY;
-    int velocidadeInicial = 3;
+    int velocidadeInicial = 1;
+    Thread bolaThread;
 
     
     Bola(int x, int y, int largura, int altura) {
         super (x, y, largura, altura);
+        bolaThread = new Thread(this);
+        bolaThread.start();
         
         random = new Random();
         
@@ -43,4 +46,16 @@ public class Bola extends Rectangle {
         g.setColor(Color.white);
         g.fillOval(x, y, height, width);
     }
+
+    @Override
+    public void run() {
+        try {
+            while(true) {
+                mover();
+                Thread.sleep(8);
+            }
+        } catch(Exception e) {System.err.println(e.getMessage());}
+            
+        }
+    
 }
