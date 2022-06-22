@@ -111,12 +111,14 @@ public class GamePanel extends JPanel implements Runnable{
         if (bola1.intersects(raquete1)) {
             bola1.velocidadeX = bola1.velocidadeX * (-1);
             bola1.velocidadeX++;
-            if (bola1.velocidadeY > 0) {
+           
+            /*if (bola1.velocidadeY > 0) {
                 bola1.velocidadeY++;
             }
             else {
                 bola1.velocidadeY--;
-            }
+            }*/
+            
             bola1.setSentidoX(bola1.velocidadeX);
             bola1.setSentidoY(bola1.velocidadeY);
         }
@@ -138,12 +140,12 @@ public class GamePanel extends JPanel implements Runnable{
         if (bola1.intersects(raquete2)) {
             bola1.velocidadeX = bola1.velocidadeX * (-1);
             bola1.velocidadeX++;
-            if (bola1.velocidadeY > 0) {
+            /*if (bola1.velocidadeY > 0) {
                 bola1.velocidadeY++;
             }
             else {
                 bola1.velocidadeY--;
-            }
+            }*/
             bola1.setSentidoX(-bola1.velocidadeX);
             bola1.setSentidoY(bola1.velocidadeY);
         }
@@ -183,6 +185,8 @@ public class GamePanel extends JPanel implements Runnable{
         double amountOfTicks = 120.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
+        
+        
         while(true) {
             long now = System.nanoTime();
             delta = delta + (now - lastTime)/ns;
@@ -193,6 +197,12 @@ public class GamePanel extends JPanel implements Runnable{
                 repaint();
                 delta--;
                 //System.out.println("Test");
+            }
+            //simple computer opponent who is following the ball
+            if(bola1.x < TELA_LARGURA - TELA_LARGURA  / 4) {
+                    raquete2.y = bola1.y - RAQUETE_ALTURA / 2;
+            }  else {
+                    raquete2.y =  bola1.y > raquete2.y + RAQUETE_ALTURA / 2 ?raquete2.y += 1: raquete2.y - 1;
             }
         }
     }
