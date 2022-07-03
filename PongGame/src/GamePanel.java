@@ -25,7 +25,6 @@ public class GamePanel extends JPanel implements Runnable{
     Raquete raquete1;
     Raquete raquete2;
     Bola bola1;
-    //Bola bola2;
     Placar placar;
     //------------------------------------
     
@@ -44,7 +43,6 @@ public class GamePanel extends JPanel implements Runnable{
     public void newBola() {
         //random = new Random();
         bola1 = new Bola((TELA_LARGURA/2)-(BOLA_TAMANHO/2), (TELA_ALTURA/2)-(BOLA_TAMANHO/2), BOLA_TAMANHO, BOLA_TAMANHO);
-        //bola2 = new Bola((TELA_LARGURA/2)-(BOLA_TAMANHO/2), (TELA_ALTURA/2)-(BOLA_TAMANHO/2), BOLA_TAMANHO, BOLA_TAMANHO);
     }
     public void newRaquete() {
         raquete1 = new Raquete(0,(TELA_ALTURA/2)-(RAQUETE_ALTURA/2), RAQUETE_LARGURA, RAQUETE_ALTURA,1);
@@ -62,7 +60,6 @@ public class GamePanel extends JPanel implements Runnable{
         raquete1.draw(g);
         raquete2.draw(g);
         bola1.draw(g);
-        //bola2.draw(g);
         placar.draw(g); //Divisa da mesa   
     }
     //------------------------------------
@@ -71,7 +68,6 @@ public class GamePanel extends JPanel implements Runnable{
         raquete1.mover();   //Permite uma fluidez maior das raquetes
         raquete2.mover();   //Permite uma fluidez maior das raquetes
         bola1.mover();
-        //bola2.mover();
     }
     
     
@@ -84,14 +80,6 @@ public class GamePanel extends JPanel implements Runnable{
         if (bola1.y >= TELA_ALTURA - BOLA_TAMANHO) {
             bola1.setSentidoY(-bola1.velocidadeY);
         }
-        //Bola 2
-        /*if (bola2.y <= 0) {
-            bola2.setSentidoY(-bola2.velocidadeY); 
-        }
-        if (bola2.y >= TELA_ALTURA - BOLA_TAMANHO) {
-            bola2.setSentidoY(-bola2.velocidadeY);
-        }
-        */
         //Raquete 1
         if (raquete1.y <= 0) {
             raquete1.y = 0;
@@ -110,79 +98,45 @@ public class GamePanel extends JPanel implements Runnable{
         //Bola 1 rebate na raquete 1
         if (bola1.intersects(raquete1)) {
             bola1.velocidadeX = bola1.velocidadeX * (-1);
-            bola1.velocidadeX++;
-           
-            /*if (bola1.velocidadeY > 0) {
-                bola1.velocidadeY++;
-            }
-            else {
-                bola1.velocidadeY--;
-            }*/
             
             bola1.setSentidoX(bola1.velocidadeX);
             bola1.setSentidoY(bola1.velocidadeY);
         }
-        //Bola 2 rebate na raquete 1
-        /*if (bola2.intersects(raquete1)) {
-            bola2.velocidadeX = bola2.velocidadeX * (-1);
-            bola2.velocidadeX++;
-            if (bola2.velocidadeY > 0) {
-                bola2.velocidadeY++;
-            }
-            else {
-                bola2.velocidadeY--;
-            }
-            bola2.setSentidoX(bola2.velocidadeX);
-            bola2.setSentidoY(bola2.velocidadeY);
-        }*/
 
         //Bola 1 rebate na raquete 2
         if (bola1.intersects(raquete2)) {
             bola1.velocidadeX = bola1.velocidadeX * (-1);
             bola1.velocidadeX++;
-            /*if (bola1.velocidadeY > 0) {
-                bola1.velocidadeY++;
-            }
-            else {
-                bola1.velocidadeY--;
-            }*/
             bola1.setSentidoX(-bola1.velocidadeX);
             bola1.setSentidoY(bola1.velocidadeY);
         }
 
-        //Bola 2 rebate na raquete 2
-        /*if (bola2.intersects(raquete2)) {
-            bola2.velocidadeX = bola2.velocidadeX * (-1);
-            bola2.velocidadeX++;
-            if (bola2.velocidadeY > 0) {
-                bola2.velocidadeY++;
-            }
-            else {
-                bola2.velocidadeY--;
-            }
-            bola2.setSentidoX(-bola2.velocidadeX);
-            bola2.setSentidoY(bola2.velocidadeY);
-        }
-        */
         //Marca o score e recria os obj
         //Player 2
-        if (bola1.x  <= 0 /*|| bola2.x <= 0*/) {
+        if (bola1.x  <= 0/*|| bola2.x <= 0*/) {
             placar.player2++;
             newRaquete();
             newBola();     
         }
         //Player 1
-        if (bola1.x >= TELA_LARGURA-BOLA_TAMANHO /*|| bola2.x >= TELA_LARGURA-BOLA_TAMANHO*/) {
+        if (bola1.x >= TELA_LARGURA-BOLA_TAMANHO/*|| bola2.x >= TELA_LARGURA-BOLA_TAMANHO*/) {
             placar.player1++;
             newRaquete();
             newBola();     
         }
         
+        //Pequena IA para controlar a Raquete 2 -> Desativando esse trecho, é possivel jogar multiplayer
+        /*if(bola1.x < TELA_LARGURA - TELA_LARGURA  / 4) {
+                raquete2.y = 2 + bola1.y - RAQUETE_ALTURA / 2;
+        }  else {
+                //Alterando estes valores, é possível deixar a IA melhor ou pior
+                raquete2.y =  2 + bola1.y > raquete2.y + RAQUETE_ALTURA / 2 ?raquete2.y += 2 : raquete2.y - 1;
+            }     */   
         
     }
     public void run() {     //Para rodar o game a 60 fps; Trecho de código do Minecraft
         long lastTime = System.nanoTime();
-        double amountOfTicks = 120.0;
+        double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         
@@ -196,14 +150,8 @@ public class GamePanel extends JPanel implements Runnable{
                 checarColisao();
                 repaint();
                 delta--;
-                //System.out.println("Test");
             }
-            //simple computer opponent who is following the ball
-            if(bola1.x < TELA_LARGURA - TELA_LARGURA  / 4) {
-                    raquete2.y = bola1.y - RAQUETE_ALTURA / 2;
-            }  else {
-                    raquete2.y =  bola1.y > raquete2.y + RAQUETE_ALTURA / 2 ?raquete2.y += 1: raquete2.y - 1;
-            }
+
         }
     }
     
